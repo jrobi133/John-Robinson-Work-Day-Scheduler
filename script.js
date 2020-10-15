@@ -43,3 +43,34 @@ var loadSchedule = function () {
 
 
 $("#currentDay").text(m.format("dddd, MMMM Do"));
+
+
+$(function () {
+    loadSchedule();
+
+    $("#schedule .row").each(function () {
+        var this_row = $(this);
+        var row_time = this_row.data("time");
+        var row_task = this_row.find("div:nth-child(2)");
+        var row_button = this_row.find("div:nth-child(3)");
+        auditTime(row_task, row_time);
+    });
+});
+
+$(".hourly-task").on("click", function () {
+    var childrenCount = $(this).find("textarea").length;
+    if (childrenCount > 0) {
+        $(this).empty();
+    }
+    var displayText = $(this).text().trim();
+    var textInput = $("<textarea>").val(displayText);
+    $(this).empty().append(textInput);
+    textInput.trigger("focus");
+});
+
+$(".hourly-task").on("blur", "textarea", function () {
+    var textInput = $(this).val().trim();
+    $(this).closest(".hourly-task").text(textInput);
+    saveSchedule();
+});
+$(".save-btn").on("click", saveSchedule);
